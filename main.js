@@ -28,6 +28,7 @@ gunnyRunImage.src = 'sonicspritesheet.png';
 canvasElement.width = window.innerWidth;
 canvasElement.height = 512;
 let sprites = [];
+/*
 function createNewSprite(...props) {
   ctx.imageSmoothingEnabled = false;
   //x,y,spriteData,scale
@@ -119,6 +120,8 @@ function drawAnimatedVisual(visual) {
     height
   );
 }
+*/
+/*
 let actors = [];
 function createNewActor(x, y, visual, variables = {}) {
   let actor = {
@@ -169,8 +172,8 @@ function createNewParrallax(...props) {
   }
   parrallaxes.push(parrallax);
   return parrallax;
-}
-createNewParrallax(
+}*/
+graphics.createNewParrallax(
   {
     speed: 1000,
     image: 'khanRoad.png',
@@ -258,8 +261,8 @@ let keysHitCorrectly = 0;
 let health = 8;
 let healthIndicatorElement = document.getElementById('healthIndicator');
 healthIndicatorElement.innerHTML = `Health:${health}`;
-let lionVisual = createNewSprite(256, 256, lionImage, 0.5);
-let winVisual = createNewSprite(
+let lionVisual = graphics.createNewSprite(256, 256, lionImage, 0.5);
+let winVisual = graphics.createNewSprite(
   canvasElement.width / 2,
   canvasElement.height / 2,
   winImage,
@@ -270,7 +273,7 @@ let winVisual = createNewSprite(
   0
 );
 winVisual.remove();
-let loseVisual = createNewSprite(
+let loseVisual = graphics.createNewSprite(
   canvasElement.width / 2,
   canvasElement.height / 2,
   loseImage,
@@ -405,14 +408,14 @@ lionActor.stateCallbacks['slash'] = () => {
     newGame(false);
     //ostrichVisual.remove();
   }
-  let clawMark = createNewSprite(550, 256, clawMarkImage, 0.5);
+  let clawMark = graphics.createNewSprite(550, 256, clawMarkImage, 0.5);
   setTimeout(() => {
     lionActor.setState('main');
     clawMark.remove();
   }, 500);
 };
-let ostrichVisual = createNewSprite(600, 256, ostrichImage, 1);
-let gunnyRunVisual = createNewSprite(256, 256, gunnyRunImage, 10, 500, 10, 60);
+let ostrichVisual = graphics.createNewSprite(600, 256, ostrichImage, 1);
+let gunnyRunVisual = graphics.createNewSprite(256, 256, gunnyRunImage, 10, 500, 10, 60);
 gunnyRunVisual.loop = false;
 let promptElement = document.getElementById('prompt');
 let fullIndicatorElement = document.getElementById('full');
