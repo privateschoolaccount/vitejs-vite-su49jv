@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div id="layout">
+      <div id="ostrichLayoutContainer">
+        <div id="ostrichOverlay">
+          <div id="instructions">Press the Alt key to pause</div>
+          <div id="indicators">
+            <div id="indicatorsBackground">
+              <div id="healthIndicator"></div>
+
+              <div id="timeIndicator"></div>
+
+              <div id="accuracyIndicator"></div>
+
+              <div id="winsIndicator"></div>
+              <div id="hiScoreIndicator"></div>
+            </div>
+          </div>
+          <div id="menu">
+            <ul>
+              <a href="/stats"><button>Stats</button></a>
+            </ul>
+          </div>
+        </div>
+        <div id="restartContainer">
+          <button id="restartButton">Restart</button>
+        </div>
+        <canvas id="canvas"> </canvas>
+      </div>
+
+      <div id="textLayoutOuterContainer">
+        <div id="textLayoutInnerContainer">
+          <div id="textLayout">
+            <div id="completed"></div>
+            <div id="prompt">skibidi toilet</div>
+          </div>
+          <div id="full">FULL</div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="main.js"></script>
+</html>
