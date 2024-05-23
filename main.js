@@ -1,4 +1,5 @@
-import * as graphics from 'canvasCode.js';
+import initGraphics from './canvasCode.js';
+
 //save accuracy
 
 let audio = new Audio(
@@ -10,7 +11,7 @@ let canvasElement = document.getElementById('canvas');
 let body = document.body;
 let paused = false;
 let ctx = canvasElement.getContext('2d');
-
+const graphics=initGraphics(ctx);
 let lionImage = new Image();
 lionImage.src = 'lionImage.png';
 let ostrichImage = new Image();
@@ -27,7 +28,7 @@ let gunnyRunImage = new Image();
 gunnyRunImage.src = 'sonicspritesheet.png';
 canvasElement.width = window.innerWidth;
 canvasElement.height = 512;
-let sprites = [];
+//let sprites = [];
 /*
 function createNewSprite(...props) {
   ctx.imageSmoothingEnabled = false;
@@ -122,6 +123,7 @@ function drawAnimatedVisual(visual) {
 }
 */
 /*
+
 let actors = [];
 function createNewActor(x, y, visual, variables = {}) {
   let actor = {
@@ -173,6 +175,7 @@ function createNewParrallax(...props) {
   parrallaxes.push(parrallax);
   return parrallax;
 }*/
+console.log(Object.keys(graphics));
 graphics.createNewParrallax(
   {
     speed: 1000,
@@ -217,6 +220,7 @@ graphics.createNewParrallax(
     top: true,
   }
 );
+/*
 function parrallaxLoop(dt) {
   for (let parrallax of parrallaxes) {
     parrallax.sort((a, b) => {
@@ -246,6 +250,7 @@ function parrallaxLoop(dt) {
     }
   }
 }
+*/
 let winsIndicatorElement = document.getElementById('winsIndicator');
 function setWinsIndicator(wins) {
   winsIndicatorElement.innerHTML = `Wins:${wins}`;
@@ -284,7 +289,7 @@ let loseVisual = graphics.createNewSprite(
   0
 );
 loseVisual.remove();
-let lionActor = createNewActor(256, 256, lionVisual);
+let lionActor = graphics.createNewActor(256, 256, lionVisual);
 let loadingNewGame = false;
 let timeIndicatorElement = document.getElementById('timeIndicator');
 let timer = 10000;
@@ -424,19 +429,7 @@ let promptText = '';
 let promptCharacters = [];
 let lastTime = performance.now();
 
-let gradient = ctx.createLinearGradient(0, 0, 0, 500);
-/*gradient.addColorStop(0,"#4c3d2e");
-gradient.addColorStop(0.1,"#4c3d2e");
-gradient.addColorStop(0.15,"#855f39");
-gradient.addColorStop(0.3,"#d39741");
-gradient.addColorStop(0.7,"yellow");
-gradient.addColorStop(1,"yellow");*/
-gradient.addColorStop(0, 'yellow');
-gradient.addColorStop(0.1, 'yellow');
-gradient.addColorStop(0.3, '#d39741');
-gradient.addColorStop(0.45, '#855f39');
-gradient.addColorStop(0.7, '#4c3d2e');
-gradient.addColorStop(1, '#4c3d2e');
+
 /*
 function animationTick(now) {
   if (
@@ -546,7 +539,7 @@ function loadGame() {
   changeText('start');
   timer = Infinity;
   function onKeyDownCallBack(e) {
-    console.log(sprites);
+    //console.log(sprites);
     if (e.key == 'Alt') {
       paused = !paused;
     }

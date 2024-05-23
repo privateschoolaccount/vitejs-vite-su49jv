@@ -1,6 +1,7 @@
 let sprites = [];
 function createNewSprite(...props) {
-  ctx.imageSmoothingEnabled = false;
+
+  this.ctx.imageSmoothingEnabled = false;
   //x,y,spriteData,scale
   let x = props[0];
   let y = props[1];
@@ -78,7 +79,7 @@ function drawAnimatedVisual(visual) {
   //console.log("skibidi",visual);
   //console.log((visual.spriteData.width/visual.frames)*visual.frame,0,visual.spriteData.width,visual.spriteData.height,visual.x-width/2,visual.y-height/2,width,height);
 
-  ctx.drawImage(
+  this.ctx.drawImage(
     visual.spriteData,
     (visual.spriteData.width / visual.frames) * visual.frame,
     0,
@@ -123,7 +124,7 @@ function createNewParrallax(...props) {
     image.src = i.image;
     //console.log(image);
     image.onload = () => {
-      let pattern = ctx.createPattern(image, 'repeat-x');
+      let pattern = this.ctx.createPattern(image, 'repeat-x');
       console.log(pattern);
       let speed = i.speed;
       let top = i.top;
@@ -153,7 +154,7 @@ function parrallaxLoop(dt) {
         //visual.pos = canvasElement.width%visual.pos;
       }
       //console.log(visual.image.height);
-      ctx.save();
+      this.ctx.save();
       let visualTranslateY = canvasElement.height - visual.image.height;
       if (visual.top != null) {
         console.log('hooHa');
@@ -162,11 +163,11 @@ function parrallaxLoop(dt) {
         }
       }
 
-      ctx.translate(visual.pos, visualTranslateY);
-      ctx.fillStyle = visual.pattern;
-      ctx.fillRect(-visual.pos, 0, canvasElement.width, canvasElement.height);
+      this.ctx.translate(visual.pos, visualTranslateY);
+      this.ctx.fillStyle = visual.pattern;
+      this.ctx.fillRect(-visual.pos, 0, canvasElement.width, canvasElement.height);
       visual.pos -= visual.speed * dt;
-      ctx.restore();
+      this.ctx.restore();
     }
   }
 }
@@ -174,6 +175,7 @@ let tickCallBacks = [];
 function addTickCallBack(cb, before = true) {
   tickCallBacks.push({ cb: cb, before: before });
 }
+
 function animationTick(now) {
   for (let i of tickCallBacks) {
     if (!i.before) {
@@ -200,9 +202,9 @@ function animationTick(now) {
     return;
   }
   */
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
-  ctx.fillStyle = 'white';
+  this.ctx.fillStyle = this.gradient;
+  this.ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+  this.ctx.fillStyle = 'white';
   let dt = now - lastTime;
   lastTime = now;
   parrallaxLoop(dt / 1000);
@@ -239,10 +241,35 @@ function animationTick(now) {
   requestAnimationFrame(animationTick);
 }
 
-export default {
-  animationTick: animationTick,
-  parrallaxLoop: parrallaxLoop,
-  createNewParrallax: createNewParrallax,
-  createNewActor: createNewActor,
-  createNewSprite: createNewSprite,
-};
+export default function initGraphics(ctx,canvasElement){
+  let items =  {
+    animationTick: animationTick, 
+    parrallaxLoop: parrallaxLoop,
+    createNewParrallax: createNewParrallax,
+    createNewActor: createNewActor,
+    createNewSprite: createNewSprite,
+  }
+  let newItems = {
+
+  }
+  let gradient = ctx.createLinearGradient(0, 0, 0, 500);
+  /*gradient.addColorStop(0,"#4c3d2e");
+  gradient.addColorStop(0.1,"#4c3d2e");
+  gradient.addColorStop(0.15,"#855f39");
+  gradient.addColorStop(0.3,"#d39741");
+  gradient.addColorStop(0.7,"yellow");
+  gradient.addColorStop(1,"yellow");*/
+  gradient.addColorStop(0, 'yellow');
+  gradient.addColorStop(0.1, 'yellow');
+  gradient.addColorStop(0.3, '#d39741');
+  gradient.addColorStop(0.45, '#855f39');
+  gradient.addColorStop(0.7, '#4c3d2e');
+  gradient.addColorStop(1, '#4c3d2e');
+  for(const [k,v] of Object.entries(items)){
+    let newFunc = v.bind({ctx:ctx,gradient:gradient});
+    console.log(newFunc);
+    newItems[k] = newFunc;
+  }
+  return newItems;
+}
+
