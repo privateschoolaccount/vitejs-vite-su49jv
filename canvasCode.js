@@ -149,13 +149,13 @@ function parrallaxLoop(dt) {
     });
     for (let visual of parrallax) {
       //console.log(visual);
-      if (Math.abs(visual.pos) >= canvasElement.width) {
+      if (Math.abs(visual.pos) >= this.canvasElement.width) {
         //to make it smooth
         //visual.pos = canvasElement.width%visual.pos;
       }
       //console.log(visual.image.height);
       this.ctx.save();
-      let visualTranslateY = canvasElement.height - visual.image.height;
+      let visualTranslateY = this.canvasElement.height - visual.image.height;
       if (visual.top != null) {
         console.log('hooHa');
         if (visual.top) {
@@ -165,7 +165,7 @@ function parrallaxLoop(dt) {
 
       this.ctx.translate(visual.pos, visualTranslateY);
       this.ctx.fillStyle = visual.pattern;
-      this.ctx.fillRect(-visual.pos, 0, canvasElement.width, canvasElement.height);
+      this.ctx.fillRect(-visual.pos, 0, this.canvasElement.width, this.canvasElement.height);
       visual.pos -= visual.speed * dt;
       this.ctx.restore();
     }
@@ -203,7 +203,7 @@ function animationTick(now) {
   }
   */
   this.ctx.fillStyle = this.gradient;
-  this.ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+  this.ctx.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   this.ctx.fillStyle = 'white';
   let dt = now - lastTime;
   lastTime = now;
@@ -266,7 +266,7 @@ export default function initGraphics(ctx,canvasElement){
   gradient.addColorStop(0.7, '#4c3d2e');
   gradient.addColorStop(1, '#4c3d2e');
   for(const [k,v] of Object.entries(items)){
-    let newFunc = v.bind({ctx:ctx,gradient:gradient});
+    let newFunc = v.bind({ctx:ctx,gradient:gradient,canvasElement:canvasElement});
     console.log(newFunc);
     newItems[k] = newFunc;
   }
