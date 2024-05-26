@@ -1,6 +1,6 @@
 let sprites = [];
 function createNewSprite(...props) {
-
+  console.log("poo",this)
   this.ctx.imageSmoothingEnabled = false;
   //x,y,spriteData,scale
   let x = props[0];
@@ -54,6 +54,7 @@ function createNewSprite(...props) {
   return r;
 }
 function drawAnimatedVisual(visual) {
+  
   if (Date.now() - visual.lastTime > visual.speed) {
     visual.lastTime = Date.now();
     visual.frame++;
@@ -78,7 +79,7 @@ function drawAnimatedVisual(visual) {
   }
   //console.log("skibidi",visual);
   //console.log((visual.spriteData.width/visual.frames)*visual.frame,0,visual.spriteData.width,visual.spriteData.height,visual.x-width/2,visual.y-height/2,width,height);
-
+  console.log(this);
   this.ctx.drawImage(
     visual.spriteData,
     (visual.spriteData.width / visual.frames) * visual.frame,
@@ -177,6 +178,7 @@ function addTickCallBack(cb, before = true) {
 }
 
 function animationTick(now) {
+  console.log(this);
   for (let i of tickCallBacks) {
     if (!i.before) {
       continue;
@@ -205,8 +207,8 @@ function animationTick(now) {
   this.ctx.fillStyle = this.gradient;
   this.ctx.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
   this.ctx.fillStyle = 'white';
-  let dt = now - lastTime;
-  lastTime = now;
+  let dt = now - this.lastTime;
+  this.lastTime = now;
   parrallaxLoop(dt / 1000);
   for (let i of actors) {
     if (i.disabled) {
@@ -218,12 +220,14 @@ function animationTick(now) {
   sprites.sort((a, b) => {
     return a.zIndex - b.zIndex;
   });
+  
   for (let i of sprites) {
     //console.log(i);
     if (i.disabled) {
       continue;
     }
-    drawAnimatedVisual(i);
+    //console.log(i);
+    drawAnimatedVisual.call(this,i);
   }
   for (let i of tickCallBacks) {
     if (i.before) {
@@ -239,6 +243,7 @@ function animationTick(now) {
     newGame(true);
   }*/
   requestAnimationFrame(animationTick);
+  return "goon";
 }
 
 export default function initGraphics(ctx,canvasElement){
@@ -248,9 +253,8 @@ export default function initGraphics(ctx,canvasElement){
     createNewParrallax: createNewParrallax,
     createNewActor: createNewActor,
     createNewSprite: createNewSprite,
-  }
-  let newItems = {
-
+    drawAnimatedVisual:drawAnimatedVisual,
+    addTickCallBack:addTickCallBack
   }
   let gradient = ctx.createLinearGradient(0, 0, 0, 500);
   /*gradient.addColorStop(0,"#4c3d2e");
@@ -266,10 +270,11 @@ export default function initGraphics(ctx,canvasElement){
   gradient.addColorStop(0.7, '#4c3d2e');
   gradient.addColorStop(1, '#4c3d2e');
   for(const [k,v] of Object.entries(items)){
-    let newFunc = v.bind({ctx:ctx,gradient:gradient,canvasElement:canvasElement});
+    console.log(k);
+    let newFunc = v.bind({ctx:ctx,gradient:gradient,canvasElement:canvasElement,lastTime:Date.now(),tickCallBacks:tickCallBacks});
     console.log(newFunc);
-    newItems[k] = newFunc;
+    items[k] = newFunc;
   }
-  return newItems;
+  return items;
 }
 

@@ -427,7 +427,7 @@ let fullIndicatorElement = document.getElementById('full');
 let completedText = '';
 let promptText = '';
 let promptCharacters = [];
-let lastTime = performance.now();
+//let lastTime = performance.now();
 
 
 /*
@@ -513,7 +513,7 @@ function changeText(text = '') {
   timer = promptText.length;
 }
 let started = false;
-graphics.addCallBack((now) => {
+graphics.addTickCallBack((now) => {
   if (
     gunnyRunVisual.frame == gunnyRunVisual.frames - 1 &&
     !gunnyRunVisual.loop
@@ -524,13 +524,13 @@ graphics.addCallBack((now) => {
     promptElement.className = 'started';
   }
 });
-graphics.addCallBack((now) => {
+graphics.addTickCallBack((now) => {
   if (paused) {
     requestAnimationFrame(graphics.animationTick);
     return 'stop';
   }
 });
-graphics.addCallBack((now) => {
+graphics.addTickCallBack((now) => {
   if (promptText == completedText && promptText != '') {
     newGame(true);
   }
